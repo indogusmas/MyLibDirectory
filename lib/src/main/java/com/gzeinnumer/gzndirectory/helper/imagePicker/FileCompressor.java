@@ -2,6 +2,7 @@ package com.gzeinnumer.gzndirectory.helper.imagePicker;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.gzeinnumer.gzndirectory.helper.FGDir;
 
@@ -23,6 +24,8 @@ public class FileCompressor {
     private Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
     private int quality = 80;
     private String destinationDirectoryPath;
+    private  String colorText = "#FFFFFF"; //Default value white
+    private  String watermarkText = "indo Ganteng"; //Default value watermark
 
     public FileCompressor(Context context) {
         destinationDirectoryPath = context.getCacheDir().getPath() + File.separator + "images";
@@ -58,6 +61,16 @@ public class FileCompressor {
         return this;
     }
 
+    public FileCompressor setColorText(String colorText) {
+        this.colorText = colorText;
+        return this;
+    }
+
+    public  FileCompressor setWatermarkText(String watermarkText){
+        this.watermarkText = watermarkText;
+        return  this;
+    }
+
     public File compressToFile(File imageFile) throws IOException {
         return compressToFile(imageFile, imageFile.getName());
     }
@@ -66,6 +79,16 @@ public class FileCompressor {
         return ImageUtil.compressImage(imageFile, maxWidth, maxHeight, compressFormat, quality,
                 destinationDirectoryPath + File.separator + compressedFileName);
     }
+
+    public  File addWatermark(File imageFile) throws Exception{
+        return  addWatermark(imageFile, imageFile.getName(),colorText, watermarkText);
+    }
+    public  File addWatermark(File imageFile, String compresName, String colorText, String watermarkText) throws  IOException{
+        return  ImageUtil.addWaterMark(imageFile,maxWidth,maxHeight, compressFormat,quality,
+                destinationDirectoryPath+File.separator+ compresName,colorText,watermarkText);
+    }
+
+
 
     public Bitmap compressToBitmap(File imageFile) throws IOException {
         return ImageUtil.decodeSampledBitmapFromFile(imageFile, maxWidth, maxHeight);
